@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<config>
+    <modules>
+        <ADM_AbandonedCart>
+            <active>true</active>
+            <codePool>community</codePool>       
+        </ADM_AbandonedCart>
+    </modules>
+</config> 

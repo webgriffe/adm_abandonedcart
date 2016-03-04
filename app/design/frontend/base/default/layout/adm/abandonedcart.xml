@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+
+    <followup_email_abandonedcart_items>
+        <block type="sales/order_email_items" name="items" template="adm/abandonedcart/email/items.phtml">
+            <action method="addItemRender"><type>default</type><block>checkout/cart_item_renderer</block><template>adm/abandonedcart/email/cart/default.phtml</template></action>
+        </block>
+        <block type="core/text_list" name="additional.product.info" />
+    </followup_email_abandonedcart_items>
+    
+</layout>

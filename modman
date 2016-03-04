@@ -1,0 +1,8 @@
+# Module ADM_AbandonedCart
+app/code/community/ADM/AbandonedCart   app/code/community/ADM/AbandonedCart
+app/design/frontend/base/default/layout/adm/abandonedcart.xml   app/design/frontend/base/default/layout/adm/abandonedcart.xml
+app/design/frontend/base/default/template/adm/abandonedcart    app/design/frontend/base/default/template/adm/abandonedcart
+app/etc/modules/ADM_AbandonedCart.xml   app/etc/modules/ADM_AbandonedCart.xml
+app/locale/fr_FR/ADM_AbandonedCart.csv   app/locale/fr_FR/ADM_AbandonedCart.csv
+app/locale/en_US/ADM_AbandonedCart.csv   app/locale/en_US/ADM_AbandonedCart.csv
+app/locale/en_US/template/email/adm/abandonedcart_followup_email.html   app/locale/en_US/template/email/adm/abandonedcart_followup_email.html
