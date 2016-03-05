@@ -1,0 +1,15 @@
+{
+    "name": "vpietri/adm_abandonedcart",
+    "license": "OSL3",
+    "type": "magento-module",
+    "description": "This Magento extensions aims to send an eamil to customer who abandoned their cart",
+    "homepage": "",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "authors":[
+        {
+            "name":"Vincent Pietri"
+        }
+    ]
+}
