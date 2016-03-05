@@ -46,12 +46,12 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
                             <comment><![CDATA[Semicolon (;) separated values.]]></comment>       
-                        </email_copy_to>        
+                        </email_copy_to>    
                         <test_mode translate="label">
                             <label>Test Mode</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>20</sort_order>
+                            <sort_order>25</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
@@ -60,13 +60,23 @@
                         <test_email translate="label">
                             <label>Test mode email</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>25</sort_order>
+                            <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
                             <comment><![CDATA[Semicolon (;) separated values.]]></comment>      
                             <depends><test_mode>1</test_mode></depends> 
                         </test_email>                                                      
+                        <mail_limit translate="label comment">
+                            <label>Mail limit</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>35</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>    
+                            <validate>validate-digits</validate>  
+                            <comment>Max number email to send at once. Can be used in test mode or production.</comment>              
+                        </mail_limit>                            
                     </fields>
                 </general>
                 <offset1>

@@ -5,6 +5,18 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_offest_max = 3;
 
 
+    public function isEnabled($store = null)
+    {
+        return Mage::getStoreConfigFlag('abandonedcart/general/enabled', $store);
+    }
+
+    public function getMailToSendLimit($store = null)
+    {
+        $limit = Mage::getStoreConfig('abandonedcart/general/mail_limit', $store);
+
+        return $limit;
+    }
+
     public function getAvailableOffsets()
     {
         $offsets = array();
