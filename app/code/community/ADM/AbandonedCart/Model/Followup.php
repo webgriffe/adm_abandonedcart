@@ -4,8 +4,11 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 {
     protected $_trackerObject;
 
-    const XML_PATH_EMAIL_COPY_TO         = 'checkout/abandonedcart/copy_to';
-    const XML_PATH_EMAIL_IDENTITY        = 'checkout/abandonedcart/email_identity';
+    const XML_PATH_EMAIL_IDENTITY        = 'abandonedcart/general/email_identity';
+    const XML_PATH_EMAIL_COPY_TO         = 'abandonedcart/general/email_copy_to';
+
+    const XML_PATH_TEST_MODE             = 'abandonedcart/general/test_mode';
+    const XML_PATH_TEST_EMAIL            = 'abandonedcart/general/test_email';
 
     const ENTITY                         = 'abandonnedcart';
 
@@ -152,12 +155,18 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     {
         $mailSent = false;
 
-        // Get the destination email addresses to send copies to
-        $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
 
-        $copyMethod = 'copy';
 
         $tpl = Mage::getModel('core/email_template');
+
+        // Get the destination email addresses to send copies to
+        $bcc = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
+        if($bcc) {
+            $tpl->addBcc($bcc);
+        }
+
+
+
 
         // Start store emulation process
         /** @var $appEmulation Mage_Core_Model_App_Emulation */
@@ -169,11 +178,16 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
                 );
 
         try {
+            $mailTo = $this->_getMailTo();
+            if(empty($mailTo)) {
+                throw new Exception('Empty mail');
+            }
+
             $tpl->setDesignConfig(array('area'=>'frontend', 'store'=>$this->getStoreId()))
             ->sendTransactional(
                     $templateId,
                     Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $this->getStoreId()),
-                    $this->getCustomerEmail(),
+                    $mailTo,
                     Mage::helper('customer')->getFullCustomerName($quote),
                     $tplVars
             );
@@ -193,11 +207,27 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     }
 
 
+    protected function _getMailTo()
+    {
+        $mailTo = $this->getCustomerEmail();
+        if( Mage::getStoreConfigFlag(self::XML_PATH_TEST_MODE, $this->getStoreId())) {
+            $mailTest = trim(Mage::getStoreConfig(self::XML_PATH_TEST_EMAIL, $this->getStoreId()));
+            if(!empty($mailTest)) {
+                return explode(';', $mailTest);
+            } else {
+                return false;
+            }
+        }
+        return $mailTo;
+    }
+
+
+
     protected function _getEmails($configPath)
     {
         $data = Mage::getStoreConfig($configPath, $this->getStoreId());
         if (!empty($data)) {
-            return explode(',', $data);
+            return explode(';', $data);
         }
         return false;
     }
@@ -261,12 +291,15 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 
     protected function _getNextDate()
     {
-        $delay = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset')+1, $this->getStoreId());
+        $delayCurrent = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset'), $this->getStoreId());
+        $delayNext    = Mage::helper('adm_abandonedcart')->getConfigByOffset('delay', $this->getOrigData('offset')+1, $this->getStoreId());
 
-        //TODO: Attention une erreur plante tout
+        $delayReal = $delayNext-$delayCurrent;
 
         $date = new Zend_Date($this->getMailScheduledAt());
-        $date->add($delay, Zend_Date::HOUR);
+        if($delayReal>0) {
+            $date->add($delayReal, Zend_Date::HOUR);
+        }
 
         return $date;
     }

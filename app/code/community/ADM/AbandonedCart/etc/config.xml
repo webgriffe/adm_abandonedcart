@@ -45,21 +45,21 @@
         </resources>
         <template>
             <email>
-                <abandonedcart_followup_email1_template translate="label" module="adm_abandonedcart">
-                    <label>New Order</label>
+                <abandonedcart_offset1_template translate="label" module="adm_abandonedcart">
+                    <label>Abandoned cart first reminder</label>
                     <file>adm/abandonedcart_followup_email.html</file>
                     <type>html</type>
-                </abandonedcart_followup_email1_template>
-                <abandonedcart_followup_email2_template translate="label" module="adm_abandonedcart">
-                    <label>New Order</label>
+                </abandonedcart_offset1_template>
+                <abandonedcart_offset2_template translate="label" module="adm_abandonedcart">
+                    <label>Abandoned cart second reminder</label>
                     <file>adm/abandonedcart_followup_email.html</file>
                     <type>html</type>
-                </abandonedcart_followup_email2_template>  
-                <abandonedcart_followup_email3_template translate="label" module="adm_abandonedcart">
-                    <label>New Order</label>
+                </abandonedcart_offset2_template>
+                <abandonedcart_offset3_template translate="label" module="adm_abandonedcart">
+                    <label>Abandoned cart third reminder</label>
                     <file>adm/abandonedcart_followup_email.html</file>
                     <type>html</type>
-                </abandonedcart_followup_email3_template>  
+                </abandonedcart_offset3_template>
             </email>
         </template>        
         <events>
@@ -94,6 +94,17 @@
         <events>
         </events>
     </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <ADM_AbandonedCart>
+                    <files>
+                        <default>ADM_AbandonedCart.csv</default>
+                    </files>
+                </ADM_AbandonedCart>
+            </modules>
+        </translate>    
+    </adminhtml>
     <crontab>
         <jobs>
             <adm_abandonedcart>
@@ -101,26 +112,25 @@
                     <cron_expr>0 1 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>adm_abandonedcart/observer::register</model>
+                    <model>adm_abandonedcart/observer::registerAbandonedCartAndSendFirstMail</model>
                 </run>
             </adm_abandonedcart>
         </jobs>
     </crontab>    
     <default>
-        <checkout>
             <abandonedcart>
-                <email_identity>general</email_identity>
+                <general>
+                    <email_identity>general</email_identity>
+                </general>
                 <offset1>
                     <delay>24</delay>
-                    <template>abandonedcart_followup_email1_template</template>
+                    <template>abandonedcart_offset1_template</template>
                 </offset1>
                 <offset2>
-                    <delay>48</delay>
-                    <template>abandonedcart_followup_email2_template</template>
+                    <template>abandonedcart_offset2_template</template>
                 </offset2>
                 <offset3>
-                    <delay>568</delay>
-                    <template>abandonedcart_followup_email3_template</template>
+                    <template>abandonedcart_offset3_template</template>
                 </offset3>
                 <utm_parameters>
                     <utm_source>magento</utm_source>
@@ -130,6 +140,5 @@
                     <utm_campaign>abandonedcart</utm_campaign>
                 </utm_parameters>
             </abandonedcart>
-        </checkout>
     </default>
 </config>

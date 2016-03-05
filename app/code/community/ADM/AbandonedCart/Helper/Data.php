@@ -2,21 +2,34 @@
 
 class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    protected $_offest_max = 3;
+
 
     public function getAvailableOffsets()
     {
-         return array(1,2,3);
+        $offsets = array();
+        $config =Mage::getStoreConfig('abandonedcart');
+        for($offsetNbr=1; $offsetNbr<=$this->_offest_max; $offsetNbr++) {
+            $configKey = 'offset' . $offsetNbr;
+            if(!empty($config[$configKey]) and !empty($config[$configKey]['scheduled']) and !empty($config[$configKey]['delay'])) {
+                $offsets[]  = $offsetNbr;
+            } else {
+                break;
+            }
+        }
+
+         return $offsets;
     }
 
     public function getMaxOffset()
     {
-        return 3;
+        return max($this->getAvailableOffsets());
     }
 
     public function getOffsetDelays()
     {
         $delays = array();
-        for($offset=1; $offset<=$this->getMaxOffset(); $offset++) {
+        foreach($this->getAvailableOffsets() as $offset) {
             $delays[$offset] = $this->getConfigByOffset('delay', $offset);
         }
 
@@ -26,7 +39,7 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getConfigByOffset($config, $offset, $store = null)
     {
-        return Mage::getStoreConfig('checkout/abandonedcart/offset'.$offset.'/'.$config, $store);
+        return Mage::getStoreConfig('abandonedcart/offset'.$offset.'/'.$config, $store);
     }
 
     public function followVirtual()
@@ -36,6 +49,6 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getUtmParams($store = null)
     {
-        return Mage::getStoreConfig('checkout/abandonedcart/utm_parameters', $store);
+        return Mage::getStoreConfig('abandonedcart/utm_parameters', $store);
     }
 }

@@ -3,7 +3,7 @@
 {"store url=\"\"":"Store Url",
 "var logo_url":"Email Logo Image Url",
 "var logo_alt":"Email Logo Image Alt",
-"htmlescape var=$customer.name":"Customer Name",
+"var fo.email":"Customer Email",
 "var customer.email":"Customer Email"
 @-->
 <!--@styles
@@ -18,7 +18,7 @@
             <table cellpadding="0" cellspacing="0" border="0">
                 <tr>
                     <td class="email-heading">
-                        <h1>Thank you for your visit from {{var store.getFrontendName()}}.</h1>
+                        <h1>Thank you for your visit on {{var store.getFrontendName()}}.</h1>
                         <p></p>
                     </td>
                     <td class="store-info">
@@ -40,9 +40,15 @@
             </table>
         </td>
     </tr>
+    <tr>
+        <td class="quote-details">
+            <h3>Your quote is waiting for you</h3>
+            <p>Click here <a href="{{var followup.restore_url}}">to restore</a> your quote</p>
+        </td>
+    </tr>
     <tr class="items">
         <td>
-            {{layout handle="sales_email_order_items" order=$order}}
+            {{layout handle="followup_email_abandonedcart_items" quote=$quote}}
         </td>
     </tr>
 </table>
