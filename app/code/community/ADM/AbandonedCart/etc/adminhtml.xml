@@ -28,14 +28,14 @@
             </admin>
         </resources>
     </acl>
-<!--     <menu>
+    <menu>
         <customer>
              <children>
                  <adm_abandonedcart translate="title" module="adm_abandonedcart">
                      <title>Abandoned Cart</title>
-                     <action>adm_abandonedcart/adminhtml_index</action>
+                     <action>adminhtml/abandonedcart_followup</action>
                  </adm_abandonedcart>
              </children>
         </customer>
-    </menu> -->
+    </menu>
 </config>

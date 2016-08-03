@@ -2,7 +2,6 @@
 class ADM_AbandonedCart_Model_Observer
 {
     /**
-     * Cron job method for product flat to reindex
      *
      * @param Mage_Cron_Model_Schedule $schedule
      */

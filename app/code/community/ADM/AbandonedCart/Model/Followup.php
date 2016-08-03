@@ -41,6 +41,10 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
                 $minDelay = min($minDelay, $delay);
                 $maxDelay = max($maxDelay, $delay);
             }
+            
+            if($maxDelay==$minDelay) {
+                $maxDelay = 2*$minDelay;
+            }
             return $this->getResource()->registerAbandonedCart($minDelay, $maxDelay);
         } else {
             return 0;

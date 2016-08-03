@@ -105,11 +105,22 @@
             </modules>
         </translate>    
     </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <ADM_AbandonedCart before="Mage_Adminhtml">ADM_AbandonedCart_Adminhtml</ADM_AbandonedCart>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>    
     <crontab>
         <jobs>
             <adm_abandonedcart>
                 <schedule>
-                    <cron_expr>0 1 * * *</cron_expr>
+                    <cron_expr>*/30 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>adm_abandonedcart/observer::registerAbandonedCartAndSendFirstMail</model>
