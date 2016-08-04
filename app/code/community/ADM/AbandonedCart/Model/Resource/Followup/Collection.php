@@ -13,7 +13,7 @@ class ADM_AbandonedCart_Model_Resource_Followup_Collection extends Mage_Core_Mod
     {
         $availableOffsets = Mage::helper('adm_abandonedcart')->getMaxOffset();
 
-        $this->addFieldToFilter('is_closed', 0)
+        $this->addFieldToFilter('status', array('lteq'=>0))
             ->addFieldToFilter('offset', array('lt'=>Mage::helper('adm_abandonedcart')->getMaxOffset()))
             ->addFieldToFilter('mail_scheduled_at', array('lteq'=>Mage::app()->getLocale()->date()->toString(Varien_Date::DATETIME_INTERNAL_FORMAT)));
 

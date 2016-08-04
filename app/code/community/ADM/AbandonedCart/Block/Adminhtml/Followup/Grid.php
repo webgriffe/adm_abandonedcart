@@ -51,6 +51,13 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
                 'sortable' => false
         ));
 
+        $this->addColumn('base_grand_total', array(
+                'header' => Mage::helper('sales')->__('G.T. (Base)'),
+                'index' => 'base_grand_total',
+                'type'  => 'currency',
+                'currency' => 'currency',
+        ));
+
 
         $this->addColumn('offset', array(
                 'header' => Mage::helper('sales')->__('Mails sent'),
@@ -58,12 +65,15 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
                 'width' => '100px',
         ));
 
-        $this->addColumn('is_closed', array(
+        $this->addColumn('status', array(
                 'header' => $this->__('Status'),
                 'width' => '80px',
-                'index'  => 'is_closed',
+                'index'  => 'status',
                 'type'  => 'options',
-                'options' => array('0'=>'Closed', '1'=>'Pending'),
+                'options' => array(ADM_AbandonedCart_Model_Tracker::ERROR=>'Error',
+                        ADM_AbandonedCart_Model_Tracker::PENDING=>'Pending',
+                        ADM_AbandonedCart_Model_Tracker::SUCCESS=>'Restored'
+                        ),
                 'sortable' => false
 
         ));

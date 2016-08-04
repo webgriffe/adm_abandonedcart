@@ -41,7 +41,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
                 $minDelay = min($minDelay, $delay);
                 $maxDelay = max($maxDelay, $delay);
             }
-            
+
             if($maxDelay==$minDelay) {
                 $maxDelay = 2*$minDelay;
             }
@@ -52,19 +52,34 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 
     }
 
-    public function tryToRestoreCart()
+    public function tryToRestoreCart($restoreCode='')
     {
         $tracker = $this->getTrackerObject();
         $return = array();
-        if ($this->_getSession()->isLoggedIn()) {
+
+        if(!$this->getId()) {
+            $return['error'] = true;
+            $return['message'] = 'Unknown followup';
+            return $return;
+        } elseif(empty($restoreCode) or $this->getSecretCode()!=$restoreCode) {
+            $return['error'] = true;
+            $return['message'] = 'Restore code is invalid';
+            $tracker->setEventError(ADM_AbandonedCart_Model_Tracker::ERR_WRONG_CODE);
+        } elseif ($this->_getSession()->isLoggedIn()) {
             if ($this->getCustomerId() == $this->_getSession()->getCustomerId()) {
-                $return['error'] = true;
-                $return['message'] = 'Cannot restore current cart';
-                $tracker->setEvent(ADM_AbandonedCart_Model_Tracker::ERR_USER_LOGGED, ADM_AbandonedCart_Model_Tracker::ERROR);
+
+                if($this->_getCurrentQuoteId()==$this->getQuoteId()) {
+                    $tracker->setEventSuccess(ADM_AbandonedCart_Model_Tracker::OK_LOG_USER_WITH_CART);
+                } else {
+                    $return['error'] = true;
+                    $return['message'] = 'Cannot restore current cart';
+                    $tracker->setEventError(ADM_AbandonedCart_Model_Tracker::ERR_USER_LOGGED);
+                }
+
             } else {
                 $return['error'] = true;
                 $return['message'] = 'Cart to restore do not belong to current user';
-                $tracker->setEvent(ADM_AbandonedCart_Model_Tracker::ERR_WRONG_USER_LOGGED, ADM_AbandonedCart_Model_Tracker::ERROR);
+                $tracker->setEventError(ADM_AbandonedCart_Model_Tracker::ERR_WRONG_USER_LOGGED);
             }
         } else {
             if ($this->getCustomerId()){
@@ -73,38 +88,49 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
                 if ($customer->getId()) {
                     //TODO: Detect if cart is still the same
                     Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($customer);
-                    $tracker->setEvent(ADM_AbandonedCart_Model_Tracker::OK_LOG_USER)
-                        ->setIsRestored(1);
+                    $tracker->setEventSuccess(ADM_AbandonedCart_Model_Tracker::OK_LOG_USER);
                 }
             } elseif ($this->getQuoteId()){
                 //TODO: Detect if cart is still the same
                 $quote = Mage::getModel('sales/quote')->load($this->getQuoteId());
                 if ($quote) {
                     Mage::getSingleton('checkout/session')->replaceQuote($quote);
-                    $tracker->setEvent(ADM_AbandonedCart_Model_Tracker::OK_RESTORE_CART)
-                        ->setIsRestored(1);
+                    $tracker->setEventSuccess(ADM_AbandonedCart_Model_Tracker::OK_RESTORE_CART);
                 }
             } else {
-                $tracker->setEvent(ADM_AbandonedCart_Model_Tracker::ERR_NO_INFO, ADM_AbandonedCart_Model_Tracker::ERROR);
+                $tracker->setEventError(ADM_AbandonedCart_Model_Tracker::ERR_NO_INFO);
+                $return['error'] = true;
+                $return['message'] = 'No info';
             }
         }
 
-        $this->setIsClosed(1);
-        return $this->save();
+        $this->save();
+
+        return $return;
     }
 
     public function getRedirectUrl()
     {
-        if(!$this->hasData('redirect_url')) {
+        if(!$this->hasData('redirect_url') and $this->_getCurrentQuoteId()) {
             return 'checkout/cart';
         } else {
-            return $this->getData('redirect_url');
+            return $this->getData('redirecturl');
         }
     }
 
     protected function _getSession()
     {
         return Mage::getSingleton('customer/session');
+    }
+
+    protected function _getCurrentQuoteId()
+    {
+        $checkoutSession = Mage::getSingleton('checkout/session');
+        if($checkoutSession->hasQuote()) {
+            return $checkoutSession->getQuoteId();
+        } else {
+            return false;
+        }
     }
 
 
@@ -141,11 +167,10 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         $this->setMailSent($mailSent);
 
         if(!$mailSent) {
-            $this->setIsClosed(1);
             if(!$error) {
                 $error = ADM_AbandonedCart_Model_Tracker::ERR_SEND_DATA;
             }
-            $this->getTrackerObject()->setEvent($error);
+            $this->getTrackerObject()->setEventError($error);
         }
 
         return $this->save();
@@ -168,9 +193,6 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         if($bcc) {
             $tpl->addBcc($bcc);
         }
-
-
-
 
         // Start store emulation process
         /** @var $appEmulation Mage_Core_Model_App_Emulation */
@@ -210,7 +232,6 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         return $mailSent;
     }
 
-
     protected function _getMailTo()
     {
         $mailTo = $this->getCustomerEmail();
@@ -224,8 +245,6 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         }
         return $mailTo;
     }
-
-
 
     protected function _getEmails($configPath)
     {
@@ -246,7 +265,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     {
         $this->setData('mail_sent', $sent);
         if ($sent) {
-            $this->getTrackerObject()->setEvent(ADM_AbandonedCart_Model_Tracker::OK_SEND_MAIL);
+            $this->getTrackerObject()->setEventSuccess(ADM_AbandonedCart_Model_Tracker::OK_SEND_MAIL);
         }
         return $this;
     }
@@ -288,7 +307,13 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
             $this->setOffset($this->getOffset()+1);
         }
 
-        $this->getTrackerObject()->setOffset($this->getOffset())->save();
+        $tracker = $this->getTrackerObject();
+
+        $tracker->setOffset($this->getOffset())->save();
+
+        if($tracker->getTrackCode()) {
+            $this->setStatus($tracker->getStatus());
+        }
 
         return parent::_beforeSave();
     }

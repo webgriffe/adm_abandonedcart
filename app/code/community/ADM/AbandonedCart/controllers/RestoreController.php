@@ -11,9 +11,7 @@ class ADM_AbandonedCart_RestoreController extends Mage_Core_Controller_Front_Act
         $return = array();
         if ($id && $restoreCode) {
             $followup = Mage::getModel('adm_abandonedcart/followup')->load($id);
-            if($followup->getSecretCode()==$restoreCode) {
-                $return = $followup->tryToRestoreCart();
-            }
+            $return = $followup->tryToRestoreCart($restoreCode);
 
             if(!empty($return)) {
                 if(!empty($return['message'])) {
@@ -24,7 +22,6 @@ class ADM_AbandonedCart_RestoreController extends Mage_Core_Controller_Front_Act
                     }
                 }
             }
-
 
             $redirectUrl = $followup->getRedirectUrl();
         }

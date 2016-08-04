@@ -23,6 +23,4 @@ class ADM_AbandonedCart_Adminhtml_AbandonedCart_FollowupController extends Mage_
                 $this->getLayout()->createBlock('adm_abandonedcart/adminhtml_followup_grid')->toHtml()
         );
     }
-
-
 }

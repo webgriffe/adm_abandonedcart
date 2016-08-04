@@ -38,6 +38,7 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
                         'customer_id'=>$quote->getCustomerId(),
                         'customer_email'=>$quote->getCustomerEmail(),
                         'secret_code'=>md5(uniqid()),
+                        'currency' => $quote->getQuoteCurrencyCode(),
                         'base_grand_total'=>$quote->getBaseGrandTotal(),
                         'coupon_code'=>$quote->getCouponCode(),
                         'mail_scheduled_at'=>Varien_Date::now()
