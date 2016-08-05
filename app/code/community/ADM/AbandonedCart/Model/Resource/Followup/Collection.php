@@ -9,7 +9,7 @@ class ADM_AbandonedCart_Model_Resource_Followup_Collection extends Mage_Core_Mod
     }
 
 
-    public function filterAbandonnedCartByOffset()
+    public function filterAbandonedCartByOffset()
     {
         $availableOffsets = Mage::helper('adm_abandonedcart')->getMaxOffset();
 

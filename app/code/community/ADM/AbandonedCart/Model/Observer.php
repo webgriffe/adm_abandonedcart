@@ -14,7 +14,7 @@ class ADM_AbandonedCart_Model_Observer
         $affectedRows = Mage::getModel('adm_abandonedcart/followup')->registerAbandonedCart();
 
         $collection =  Mage::getModel('adm_abandonedcart/followup')->getCollection()
-            ->filterAbandonnedCartByOffset();
+            ->filterAbandonedCartByOffset();
 
         $limit = Mage::helper('adm_abandonedcart')->getMailToSendLimit();
         if($limit) {

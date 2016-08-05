@@ -34,7 +34,7 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
             foreach($quotes as $quote) {
                 $folloupRows[] = array('quote_id'=>$quote->getId(),
                         'store_id'=>$quote->getStoreId(),
-                        'abandonned_at'=>$quote->getUpdatedAt(),
+                        'abandoned_at'=>$quote->getUpdatedAt(),
                         'customer_id'=>$quote->getCustomerId(),
                         'customer_email'=>$quote->getCustomerEmail(),
                         'secret_code'=>md5(uniqid()),

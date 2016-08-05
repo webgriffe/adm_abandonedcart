@@ -10,7 +10,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     const XML_PATH_TEST_MODE             = 'abandonedcart/general/test_mode';
     const XML_PATH_TEST_EMAIL            = 'abandonedcart/general/test_email';
 
-    const ENTITY                         = 'abandonnedcart';
+    const ENTITY                         = 'abandonedcart';
 
     const EMAIL_EVENT_NAME               = 'send_followup';
 
@@ -104,6 +104,10 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
             }
         }
 
+//         var_dump($this->_getSession()->isLoggedIn(), $return);
+//         exit;
+
+
         $this->save();
 
         return $return;
@@ -134,12 +138,12 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     }
 
 
-    public function sendMail()
+    public function sendMail($force=false)
     {
         $mailSent = false;
         $error    = false;
 
-        $templateId = $this->_getTemplate();
+        $templateId = $force ? Mage::getStoreConfig('abandonedcart/admin/template') : $this->_getTemplate();
         if(empty($templateId)) {
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_TEMPLATE;
         }
@@ -152,7 +156,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         }
 
 
-        if(!$this->getQuoteStillActive()) {
+        if(!$force and !$this->getQuoteStillActive()) {
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_QUOTE_ACTIVE;
         }
 
@@ -164,14 +168,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
             }
         }
 
-        $this->setMailSent($mailSent);
-
-        if(!$mailSent) {
-            if(!$error) {
-                $error = ADM_AbandonedCart_Model_Tracker::ERR_SEND_DATA;
-            }
-            $this->getTrackerObject()->setEventError($error);
-        }
+        $this->setMailSent($mailSent, $error);
 
         return $this->save();
     }
@@ -183,8 +180,6 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     public function _sendMail($templateId, $quote)
     {
         $mailSent = false;
-
-
 
         $tpl = Mage::getModel('core/email_template');
 
@@ -261,12 +256,18 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         return Mage::helper('adm_abandonedcart')->getConfigByOffset('template', $this->getOffset()+1, $this->getStoreId());
     }
 
-    public function setMailSent($sent = false)
+    public function setMailSent($sent = false, $error= false)
     {
         $this->setData('mail_sent', $sent);
         if ($sent) {
-            $this->getTrackerObject()->setEventSuccess(ADM_AbandonedCart_Model_Tracker::OK_SEND_MAIL);
+            $this->getTrackerObject()->setEvent(ADM_AbandonedCart_Model_Tracker::OK_SEND_MAIL);
+        } else {
+            if(!$error) {
+                $error = ADM_AbandonedCart_Model_Tracker::ERR_SEND_DATA;
+            }
+            $this->getTrackerObject()->setEventError($error);
         }
+
         return $this;
     }
 
@@ -290,6 +291,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
          if (empty($this->_trackerObject)) {
              $this->_trackerObject = Mage::getModel('adm_abandonedcart/tracker');
              $this->_trackerObject->setFollowup($this);
+             $this->_trackerObject->setStatus(ADM_AbandonedCart_Model_Tracker::PENDING);
          }
 
          return $this->_trackerObject;

@@ -6,7 +6,7 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
     {
         parent::__construct();
         $this->setId('adminhtml_followup_grid');
-        $this->setDefaultSort('abandonned_at');
+        $this->setDefaultSort('abandoned_at');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(false);
         $this->setUseAjax(true);
@@ -32,9 +32,9 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
                 'index'  => 'followup_id'
         ));
 
-        $this->addColumn('abandonned_at', array(
-                'header' => Mage::helper('sales')->__('Abandonned At'),
-                'index' => 'abandonned_at',
+        $this->addColumn('abandoned_at', array(
+                'header' => Mage::helper('sales')->__('Abandoned At'),
+                'index' => 'abandoned_at',
                 'type' => 'datetime',
                 'width' => '150px',
         ));
@@ -78,7 +78,22 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
 
         ));
 
+        $this->addExportType('*/*/exportCsv', Mage::helper('adm_abandonedcart')->__('CSV'));
+
         return parent::_prepareColumns();
+    }
+
+
+    protected function _prepareMassaction()
+    {
+        $this->setMassactionIdField('id');
+        $this->getMassactionBlock()->setFormFieldName('ids');
+
+        $this->getMassactionBlock()->addItem('sendmail', array(
+                'label'=> $this->__('Send mail(s)'),
+                'url'  => $this->getUrl('*/*/massSendMail'),
+                'confirm' => $this->__('Are you sure you want to send mails()?')
+        ));
     }
 
     public function getGridUrl()
@@ -88,7 +103,6 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup_Grid extends Mage_Adminhtml_Blo
 
     public function getRowUrl($row)
     {
-        //return $this->getUrl('*/*/edit', array('id' => $row->getEntityId()));
         return false;
     }
 

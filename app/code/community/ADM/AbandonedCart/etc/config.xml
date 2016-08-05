@@ -2,7 +2,7 @@
 <config>
     <modules>
         <ADM_AbandonedCart>
-            <version>0.1.1</version>
+            <version>0.1.2</version>
         </ADM_AbandonedCart>
     </modules>
     <global>
@@ -60,6 +60,11 @@
                     <file>adm/abandonedcart_followup_email.html</file>
                     <type>html</type>
                 </abandonedcart_offset3_template>
+                <abandonedcart_admin_template translate="label" module="adm_abandonedcart">
+                    <label>Abandoned cart manual admin reminder</label>
+                    <file>adm/abandonedcart_followup_email.html</file>
+                    <type>html</type>
+                </abandonedcart_admin_template>                
             </email>
         </template>        
         <events>
@@ -143,6 +148,9 @@
                 <offset3>
                     <template>abandonedcart_offset3_template</template>
                 </offset3>
+                <admin>
+                    <template>abandonedcart_admin_template</template>
+                </admin>
                 <utm_parameters>
                     <utm_source>magento</utm_source>
                     <utm_medium>email</utm_medium>
