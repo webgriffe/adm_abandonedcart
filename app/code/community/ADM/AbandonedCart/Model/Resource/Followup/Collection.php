@@ -8,18 +8,24 @@ class ADM_AbandonedCart_Model_Resource_Followup_Collection extends Mage_Core_Mod
         return parent::_construct();
     }
 
-
-    public function filterAbandonedCartByOffset()
+    /**
+     * @param Mage_Core_Model_Store $store
+     * @return $this
+     */
+    public function filterAbandonedCartByOffset($store)
     {
-        $availableOffsets = Mage::helper('adm_abandonedcart')->getMaxOffset();
+        $this
+            ->addFieldToFilter('store_id', $store->getId())
+            ->addFieldToFilter('status', ['lteq' => 0])
+            ->addFieldToFilter('offset', ['lt' => Mage::helper('adm_abandonedcart')->getMaxOffset($store)])
+            ->addFieldToFilter('mail_scheduled_at', ['lteq' => Mage::getModel('core/date')->gmtDate()]);
 
-        $this->addFieldToFilter('status', array('lteq'=>0))
-            ->addFieldToFilter('offset', array('lt'=>Mage::helper('adm_abandonedcart')->getMaxOffset()))
-            ->addFieldToFilter('mail_scheduled_at', array('lteq' => Mage::getModel('core/date')->gmtDate()));
-
-        $this->getSelect()->join(array('quote'=>$this->getTable('sales/quote')), 'main_table.quote_id=quote.entity_id', array('quote_still_active'=>'is_active'));
+        $this->getSelect()->join(
+            ['quote' => $this->getTable('sales/quote')],
+            'main_table.quote_id = quote.entity_id',
+            ['quote_still_active' => 'is_active']
+        );
 
         return $this;
     }
-
 }

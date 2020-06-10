@@ -21,10 +21,6 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
     const OK_LOG_USER_WITH_CART           = 'ok_logged_with_cart';
     const OK_RESTORE_CART                 = 'ok_restore_cart';
 
-
-
-
-
     /**
      * Prefix of model events names
      *
@@ -38,7 +34,10 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
         return parent::_construct();
     }
 
-
+    /**
+     * @param ADM_AbandonedCart_Model_Followup $followUp
+     * @return $this
+     */
     public function setFollowup($followUp)
     {
         $this->setFollowupId($followUp->getId());
@@ -48,19 +47,35 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
         return $this;
     }
 
-    public function setEventSuccess($track_code)
+    /**
+     * @param string $trackCode
+     *
+     * @return $this
+     */
+    public function setEventSuccess($trackCode)
     {
-        return $this->setEvent($track_code, self::SUCCESS);
+        return $this->setEvent($trackCode, self::SUCCESS);
     }
 
-    public function setEventError($track_code)
+    /**
+     * @param string $trackCode
+     *
+     * @return $this
+     */
+    public function setEventError($trackCode)
     {
-        return $this->setEvent($track_code, self::ERROR);
+        return $this->setEvent($trackCode, self::ERROR);
     }
 
-    public function setEvent($track_code, $status = 0)
+    /**
+     * @param string $trackCode
+     * @param int $status
+     *
+     * @return $this
+     */
+    public function setEvent($trackCode, $status = 0)
     {
-        $this->setTrackCode($track_code);
+        $this->setTrackCode($trackCode);
         $this->setStatus($status);
 
         return $this;
@@ -73,15 +88,13 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
      */
     protected function _beforeSave()
     {
-
         if (!$this->hasTrackCode()) {
             $this->_dataSaveAllowed = false;
         } else {
-            $this->setCreatedAt(Varien_Date::now());
+            $this->setCreatedAt(Mage::getModel('core/date')->gmtDate());
             $this->setRemoteIp(Mage::helper('core/http')->getRemoteAddr());
         }
 
         return parent::_beforeSave();
     }
-
 }

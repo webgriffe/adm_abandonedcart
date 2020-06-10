@@ -2,65 +2,101 @@
 
 class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    protected $_offest_max = 3;
+    const OFFSET_MAX = 3;
 
-
-    public function isEnabled($store = null)
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return bool
+     */
+    public function isEnabled($store)
     {
         return Mage::getStoreConfigFlag('abandonedcart/general/enabled', $store);
     }
 
-    public function getMailToSendLimit($store = null)
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return int|null|false
+     */
+    public function getMailToSendLimit($store)
     {
-        $limit = Mage::getStoreConfig('abandonedcart/general/mail_limit', $store);
-
-        return $limit;
+        return Mage::getStoreConfig('abandonedcart/general/mail_limit', $store);
     }
 
-    public function getAvailableOffsets()
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return int
+     */
+    public function getMaxOffset($store)
     {
-        $offsets = array();
-        $config =Mage::getStoreConfig('abandonedcart');
-        for($offsetNbr=1; $offsetNbr<=$this->_offest_max; $offsetNbr++) {
-            $configKey = 'offset' . $offsetNbr;
-            if(!empty($config[$configKey]) and !empty($config[$configKey]['scheduled']) and !empty($config[$configKey]['delay'])) {
-                $offsets[]  = $offsetNbr;
+        return max($this->getAvailableOffsets($store));
+    }
+
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     * @return array
+     */
+    public function getOffsetDelays($store)
+    {
+        $delays = [];
+        foreach($this->getAvailableOffsets($store) as $offset) {
+            $delays[$offset] = $this->getConfigByOffset('delay', $offset, $store);
+        }
+
+        return !empty($delays[1]) ? $delays : [];
+    }
+
+    /**
+     * @param string $config
+     * @param int $offset
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return mixed
+     */
+    public function getConfigByOffset($config, $offset, $store)
+    {
+        return Mage::getStoreConfig("abandonedcart/offset{$offset}/{$config}", $store);
+    }
+
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return bool
+     */
+    public function followVirtual($store)
+    {
+        return false;
+    }
+
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     * @return array
+     */
+    public function getUtmParams($store)
+    {
+        return Mage::getStoreConfig('abandonedcart/utm_parameters', $store);
+    }
+
+    /**
+     * @param Mage_Core_Model_Store|int $store
+     *
+     * @return int[]
+     */
+    protected function getAvailableOffsets($store)
+    {
+        $offsets = [];
+        $config = Mage::getStoreConfig('abandonedcart', $store);
+        for ($offset = 1; $offset <= self::OFFSET_MAX; $offset++) {
+            $configKey = 'offset' . $offset;
+            if (!empty($config[$configKey]) && $config[$configKey]['scheduled'] && $config[$configKey]['delay']) {
+                $offsets[] = $offset;
             } else {
                 break;
             }
         }
 
-         return $offsets;
-    }
-
-    public function getMaxOffset()
-    {
-        return max($this->getAvailableOffsets());
-    }
-
-    public function getOffsetDelays()
-    {
-        $delays = array();
-        foreach($this->getAvailableOffsets() as $offset) {
-            $delays[$offset] = $this->getConfigByOffset('delay', $offset);
-        }
-
-        return !empty($delays[1]) ? $delays : array();
-    }
-
-
-    public function getConfigByOffset($config, $offset, $store = null)
-    {
-        return Mage::getStoreConfig('abandonedcart/offset'.$offset.'/'.$config, $store);
-    }
-
-    public function followVirtual()
-    {
-        return false;
-    }
-
-    public function getUtmParams($store = null)
-    {
-        return Mage::getStoreConfig('abandonedcart/utm_parameters', $store);
+        return $offsets;
     }
 }
