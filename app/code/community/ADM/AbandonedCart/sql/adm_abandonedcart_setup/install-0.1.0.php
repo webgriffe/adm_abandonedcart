@@ -119,7 +119,7 @@ $table = $installer->getConnection()
         [
             'nullable'  => false,
         ],
-        'Mail1 Scheduled At'
+        'Mail Scheduled At'
     )
     ->addIndex(
         $installer->getIdxName('adm_abandonedcart/followup', ['customer_id', 'store_id']),

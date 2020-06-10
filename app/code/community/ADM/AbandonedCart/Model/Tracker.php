@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * Class ADM_AbandonedCart_Model_Tracker
+ *
+ * @method int getTrackerId()
+ * @method $this setTrackerId(int $value)
+ * @method int getFollowupId()
+ * @method $this setFollowupId(int $value)
+ * @method int getStoreId()
+ * @method $this setStoreId(int $value)
+ * @method int getOffset()
+ * @method $this setOffset(int $value)
+ * @method string getTrackCode()
+ * @method $this setTrackCode(string $value)
+ * @method string getTrackMessage()
+ * @method $this setTrackMessage(string $value)
+ * @method string getRemoteIp()
+ * @method $this setRemoteIp(string $value)
+ * @method string getCreatedAt()
+ * @method $this setCreatedAt(string $value)
+ */
 class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
 {
     const ERROR                           = -1;
@@ -36,12 +56,13 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
 
     /**
      * @param ADM_AbandonedCart_Model_Followup $followUp
+     *
      * @return $this
      */
     public function setFollowup($followUp)
     {
         $this->setFollowupId($followUp->getId());
-        $this->setOffset($followUp->getCurrentOffset());
+        $this->setOffset($followUp->getOffset());
         $this->setStoreId($followUp->getStoreId());
 
         return $this;
@@ -76,7 +97,7 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
     public function setEvent($trackCode, $status = 0)
     {
         $this->setTrackCode($trackCode);
-        $this->setStatus($status);
+        $this->setStatus($status);  //Is this used anywhere?
 
         return $this;
     }

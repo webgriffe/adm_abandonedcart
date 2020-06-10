@@ -36,7 +36,8 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * @param Mage_Core_Model_Store|int $store
-     * @return array
+     *
+     * @return int[]
      */
     public function getOffsetDelays($store)
     {
@@ -45,7 +46,7 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
             $delays[$offset] = $this->getConfigByOffset('delay', $offset, $store);
         }
 
-        return !empty($delays[1]) ? $delays : [];
+        return $delays;
     }
 
     /**
@@ -72,6 +73,7 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
 
     /**
      * @param Mage_Core_Model_Store|int $store
+     *
      * @return array
      */
     public function getUtmParams($store)
@@ -88,7 +90,7 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $offsets = [];
         $config = Mage::getStoreConfig('abandonedcart', $store);
-        for ($offset = 1; $offset <= self::OFFSET_MAX; $offset++) {
+        for ($offset = 1; $offset <= self::OFFSET_MAX; ++$offset) {
             $configKey = 'offset' . $offset;
             if (!empty($config[$configKey]) && $config[$configKey]['scheduled'] && $config[$configKey]['delay']) {
                 $offsets[] = $offset;
