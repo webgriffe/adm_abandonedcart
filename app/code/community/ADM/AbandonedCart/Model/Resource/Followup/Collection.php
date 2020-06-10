@@ -10,16 +10,18 @@ class ADM_AbandonedCart_Model_Resource_Followup_Collection extends Mage_Core_Mod
 
     /**
      * @param Mage_Core_Model_Store $store
+     *
      * @return $this
      */
     public function filterAbandonedCartByOffset($store)
     {
         $this
-            ->addFieldToFilter('store_id', $store->getId())
-            ->addFieldToFilter('status', ['lteq' => 0])
-            ->addFieldToFilter('offset', ['lt' => Mage::helper('adm_abandonedcart')->getMaxOffset($store)])
-            ->addFieldToFilter('mail_scheduled_at', ['lteq' => Mage::getModel('core/date')->gmtDate()]);
+            ->addFieldToFilter('main_table.store_id', $store->getId())
+            ->addFieldToFilter('main_table.status', ['lteq' => 0])
+            ->addFieldToFilter('main_table.offset', ['lt' => Mage::helper('adm_abandonedcart')->getMaxOffset($store)])
+            ->addFieldToFilter('main_table.mail_scheduled_at', ['lteq' => Mage::getModel('core/date')->gmtDate()]);
 
+        //Is this still needed after the deleteInvalidFollowups() method has been added to the observer?
         $this->getSelect()->join(
             ['quote' => $this->getTable('sales/quote')],
             'main_table.quote_id = quote.entity_id',

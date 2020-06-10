@@ -3,6 +3,10 @@ class ADM_AbandonedCart_Model_Observer
 {
     /**
      * @param Mage_Cron_Model_Schedule $schedule
+     *
+     * @return ADM_AbandonedCart_Model_Observer
+     *
+     * @throws Exception
      */
     public function registerAbandonedCartAndSendFirstMail(Mage_Cron_Model_Schedule $schedule)
     {
@@ -43,14 +47,15 @@ class ADM_AbandonedCart_Model_Observer
         //Delete all followups where the quote is no longer abandoned. Thit is those cases where the quote was updated
         //after the date when it was marked as abandoned or when it was converted into an order
         $followupsToDelete = Mage::getModel('adm_abandonedcart/followup')->getCollection();
-        $followupsToDelete->addFieldToFilter('store_id', $store->getId());
-        $select = $followupsToDelete->getSelect();
-        $select->join(
-            ['quote' => $followupsToDelete->getTable('sales/quote')],
+        $followupsToDelete->addFieldToFilter('main_table.store_id', $store->getId());
+        $followupsToDelete->join(
+            ['quote' => 'sales/quote'],
             'main_table.quote_id = quote.entity_id',
             []
         );
-        $select->where('quote.updated_at > main_table.abandoned_at OR quote.is_active = 0');
+
+        //Is there a way to do this without unearthing the select object?
+        $followupsToDelete->getSelect()->where('quote.updated_at > main_table.abandoned_at OR quote.is_active = 0');
 
         /** @var ADM_AbandonedCart_Model_Followup $followupToDelete */
         foreach ($followupsToDelete as $followupToDelete) {

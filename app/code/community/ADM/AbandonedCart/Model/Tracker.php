@@ -97,7 +97,7 @@ class ADM_AbandonedCart_Model_Tracker extends Mage_Core_Model_Abstract
     public function setEvent($trackCode, $status = 0)
     {
         $this->setTrackCode($trackCode);
-        $this->setStatus($status);  //Is this used anywhere?
+        $this->setStatus($status);
 
         return $this;
     }

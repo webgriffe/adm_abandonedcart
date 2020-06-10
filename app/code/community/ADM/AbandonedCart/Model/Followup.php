@@ -163,8 +163,8 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
             return 0;
         }
 
-        $minDelay = 100000;
-        $maxDelay = 0;
+        $minDelay = PHP_INT_MAX;
+        $maxDelay = PHP_INT_MIN;
         foreach ($delays as $delay) {
             $minDelay = min($minDelay, $delay);
             $maxDelay = max($maxDelay, $delay);
@@ -191,8 +191,9 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
     public function sendMail($force = false)
     {
         $mailSent = false;
-        $error    = false;
+        $error = false;
 
+        /** @var Mage_Sales_Model_Quote $quote */
         $quote = Mage::getModel('sales/quote')
             ->setStore(Mage::app()->getStore($this->getStoreId()))
             ->load($this->getQuoteId());
@@ -212,6 +213,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_QUOTE;
         }
 
+        //Is this still needed after the deleteInvalidFollowups() method has been added to the observer?
         if (!$force && !$this->getQuoteStillActive()) {
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_QUOTE_ACTIVE;
         }
@@ -266,7 +268,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
                 throw new Exception('Empty mail');
             }
 
-            $tpl->setDesignConfig(['area'=>'frontend', 'store'=>$this->getStoreId()])
+            $tpl->setDesignConfig(['area' => 'frontend', 'store' => $this->getStoreId()])
                 ->sendTransactional(
                     $templateId,
                     Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $this->getStoreId()),

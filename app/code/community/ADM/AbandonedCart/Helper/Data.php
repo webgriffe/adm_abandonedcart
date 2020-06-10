@@ -31,7 +31,8 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getMaxOffset($store)
     {
-        return max($this->getAvailableOffsets($store));
+        //If no offset is enabled or configured, then return 0
+        return max(array_merge([0], $this->getAvailableOffsets($store)));
     }
 
     /**
@@ -42,7 +43,7 @@ class ADM_AbandonedCart_Helper_Data extends Mage_Core_Helper_Abstract
     public function getOffsetDelays($store)
     {
         $delays = [];
-        foreach($this->getAvailableOffsets($store) as $offset) {
+        foreach ($this->getAvailableOffsets($store) as $offset) {
             $delays[$offset] = $this->getConfigByOffset('delay', $offset, $store);
         }
 

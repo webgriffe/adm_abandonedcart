@@ -17,13 +17,14 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
      */
     public function registerAbandonedCart($store, $minDelay, $maxDelay)
     {
+        /** @var Mage_Sales_Model_Resource_Quote_Collection $quotes */
         $quotes = Mage::getModel('sales/quote')->getCollection()
-            ->addFieldToFilter('store_id', $store->getId())
+            ->addFieldToFilter('main_table.store_id', $store->getId())
             ->addFieldToFilter('main_table.is_active', 1)
             ->addFieldToFilter('main_table.items_count', ['gt' => 0])
             ->addFieldToFilter('main_table.customer_email', ['notnull' => true])
-            ->addFieldToFilter('main_table.updated_at', ['lt' => $this->_getDateSubTime($minDelay)])
-            ->addFieldToFilter('main_table.updated_at', ['gt' => $this->_getDateSubTime($maxDelay)]);
+            ->addFieldToFilter('main_table.updated_at', ['lt' => $this->getDateSubTime($minDelay)])
+            ->addFieldToFilter('main_table.updated_at', ['gt' => $this->getDateSubTime($maxDelay)]);
 
         if (!Mage::helper('adm_abandonedcart')->followVirtual($store)) {
             $quotes->addFieldToFilter('main_table.is_virtual', 0);
@@ -35,16 +36,17 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
                 'followup.quote_id = main_table.entity_id',
                 []
             )
-            ->where('followup.followup_id is null');
+            ->where('followup.followup_id IS NULL');
 
         Mage::dispatchEvent('adm_abandonedcart_quote_collection_load_before', ['collection' => $quotes]);
 
-        $affectedRows = 0;
+        $numberOfAbandonedQuotesFound = 0;
         if ($quotes->count() > 0) {
             $now = Mage::getModel('core/date')->gmtDate();
-            $folloupRows = [];
+            $followupRows = [];
+            /** @var Mage_Sales_Model_Quote $quote */
             foreach ($quotes as $quote) {
-                $folloupRows[] = [
+                $followupRows[] = [
                     'quote_id'          => $quote->getId(),
                     'store_id'          => $quote->getStoreId(),
                     'abandoned_at'      => $quote->getUpdatedAt(),
@@ -58,17 +60,20 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
                 ];
             }
 
-            if (count($folloupRows)) {
-                $affectedRows = $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $folloupRows);
+            if (count($followupRows)) {
+                $numberOfAbandonedQuotesFound = $this->_getWriteAdapter()->insertMultiple(
+                    $this->getMainTable(),
+                    $followupRows
+                );
             }
         }
 
-        return $affectedRows;
+        return $numberOfAbandonedQuotesFound;
     }
 
-    protected function _getDateSubTime($nbr, $type = Zend_Date::HOUR)
+    protected function getDateSubTime($nbr, $type = Zend_Date::HOUR)
     {
-        $date  = Mage::app()->getLocale()->date()
+        $date = Mage::app()->getLocale()->date()
             ->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE)
             ->sub($nbr, $type)
             ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
@@ -76,9 +81,9 @@ class ADM_AbandonedCart_Model_Resource_Followup extends Mage_Core_Model_Resource
         return $date;
     }
 
-    protected function _getDateAddTime($nbr, $type = Zend_Date::HOUR)
+    protected function getDateAddTime($nbr, $type = Zend_Date::HOUR)
     {
-        $date  = Mage::app()->getLocale()->date()
+        $date = Mage::app()->getLocale()->date()
             ->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE)
             ->add($nbr, $type)
             ->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
