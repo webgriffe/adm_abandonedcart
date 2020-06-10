@@ -15,12 +15,13 @@ class ADM_AbandonedCart_Model_Observer
 
             Mage::getModel('adm_abandonedcart/followup')->registerAbandonedCart($store);
 
-            $collection = Mage::getModel('adm_abandonedcart/followup')->getCollection()
+            $collection = Mage::getModel('adm_abandonedcart/followup')
+                ->getCollection()
                 ->filterAbandonedCartByOffset($store);
 
             $limit = Mage::helper('adm_abandonedcart')->getMailToSendLimit($store);
             if ($limit) {
-                $collection->getSelect()->limit($limit);
+                $collection->setPageSize($limit);
             }
 
             if ($collection->count() > 0) {
