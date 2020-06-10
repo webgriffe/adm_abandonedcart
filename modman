@@ -1,4 +1,3 @@
-# Module ADM_AbandonedCart
 app/code/community/ADM/AbandonedCart   app/code/community/ADM/AbandonedCart
 app/design/frontend/base/default/layout/adm/abandonedcart.xml   app/design/frontend/base/default/layout/adm/abandonedcart.xml
 app/design/frontend/base/default/template/adm/abandonedcart    app/design/frontend/base/default/template/adm/abandonedcart

@@ -20,44 +20,46 @@ class ADM_AbandonedCart_Adminhtml_AbandonedCart_FollowupController extends Mage_
     {
         $this->loadLayout();
         $this->getResponse()->setBody(
-                $this->getLayout()->createBlock('adm_abandonedcart/adminhtml_followup_grid')->toHtml()
+            $this->getLayout()->createBlock('adm_abandonedcart/adminhtml_followup_grid')->toHtml()
         );
     }
 
     public function massSendMailAction()
     {
         $followupIds = $this->getRequest()->getParam('ids');
-        if(count($followupIds) > 0 ) {
-            $followupCollection = Mage::getModel('adm_abandonedcart/followup')->getCollection()->addFieldToFilter('followup_id', $followupIds);
+
+        if (count($followupIds) > 0) {
+            $followupCollection = Mage::getModel('adm_abandonedcart/followup')
+                ->getCollection()
+                ->addFieldToFilter('followup_id', $followupIds);
             try {
-                $i=0;
-                foreach($followupCollection as $followup){
+                $i = 0;
+                foreach ($followupCollection as $followup) {
                     $followup->sendMail(true);
-                    $i+= $followup->getMailSent() ? 1 : 0;
+                    $i += ($followup->getMailSent() ? 1 : 0);
                 }
-                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('%s mail(s) successfully sent',$i));
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('%s mail(s) successfully sent', $i));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
-        }
-        else
-       {
+        } else {
             Mage::getSingleton('adminhtml/session')->addError($this->__('Nothing selected'));
         }
+
         $this->_redirect('*/*/');
     }
-
 
     public function exportCsvAction()
     {
         $fileName = 'abandoned_cart_followup.csv';
         $content = $this->getLayout()
-        ->createBlock('adm_abandonedcart/adminhtml_followup_grid')
-        ->getCsv();
-        $this->_sendUploadResponse($fileName, $content);
+            ->createBlock('adm_abandonedcart/adminhtml_followup_grid')
+            ->getCsv();
+
+        $this->sendDownloadResponse($fileName, $content);
     }
 
-    protected function _sendUploadResponse($fileName, $content, $contentType = 'text/csv')
+    protected function sendDownloadResponse($fileName, $content, $contentType = 'text/csv')
     {
         $response = $this->getResponse();
         $response->setHeader('HTTP/1.1 200 OK', '');
@@ -70,6 +72,9 @@ class ADM_AbandonedCart_Adminhtml_AbandonedCart_FollowupController extends Mage_
         $response->setHeader('Content-type', $contentType);
         $response->setBody($content);
         $response->sendResponse();
+
+        //@codingStandardsIgnoreStart
         die();
+        //@codingStandardsIgnoreEnd
     }
 }

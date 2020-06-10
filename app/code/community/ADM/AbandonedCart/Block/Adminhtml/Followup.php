@@ -10,6 +10,5 @@ class ADM_AbandonedCart_Block_Adminhtml_Followup extends Mage_Adminhtml_Block_Wi
 
         parent::__construct();
         $this->_removeButton('add');
-
     }
 }

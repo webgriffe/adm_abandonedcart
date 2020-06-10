@@ -15,7 +15,7 @@
             <adm_abandonedcart>
                 <class>ADM_AbandonedCart_Helper</class>
             </adm_abandonedcart>
-        </helpers>    
+        </helpers>
         <models>
             <adm_abandonedcart>
                 <class>ADM_AbandonedCart_Model</class>
@@ -64,11 +64,9 @@
                     <label>Abandoned cart manual admin reminder</label>
                     <file>adm/abandonedcart_followup_email.html</file>
                     <type>html</type>
-                </abandonedcart_admin_template>                
+                </abandonedcart_admin_template>
             </email>
-        </template>        
-        <events>
-        </events>
+        </template>
     </global>
     <frontend>
         <layout>
@@ -96,8 +94,6 @@
                 </ADM_AbandonedCart>
             </modules>
         </translate>
-        <events>
-        </events>
     </frontend>
     <adminhtml>
         <translate>
@@ -108,7 +104,7 @@
                     </files>
                 </ADM_AbandonedCart>
             </modules>
-        </translate>    
+        </translate>
     </adminhtml>
     <admin>
         <routers>
@@ -120,7 +116,7 @@
                 </args>
             </adminhtml>
         </routers>
-    </admin>    
+    </admin>
     <crontab>
         <jobs>
             <adm_abandonedcart>
@@ -132,32 +128,32 @@
                 </run>
             </adm_abandonedcart>
         </jobs>
-    </crontab>    
+    </crontab>
     <default>
-            <abandonedcart>
-                <general>
-                    <email_identity>general</email_identity>
-                </general>
-                <offset1>
-                    <delay>24</delay>
-                    <template>abandonedcart_offset1_template</template>
-                </offset1>
-                <offset2>
-                    <template>abandonedcart_offset2_template</template>
-                </offset2>
-                <offset3>
-                    <template>abandonedcart_offset3_template</template>
-                </offset3>
-                <admin>
-                    <template>abandonedcart_admin_template</template>
-                </admin>
-                <utm_parameters>
-                    <utm_source>magento</utm_source>
-                    <utm_medium>email</utm_medium>
-                    <utm_term></utm_term>
-                    <utm_content></utm_content>
-                    <utm_campaign>abandonedcart</utm_campaign>
-                </utm_parameters>
-            </abandonedcart>
+        <abandonedcart>
+            <general>
+                <email_identity>general</email_identity>
+            </general>
+            <offset1>
+                <delay>24</delay>
+                <template>abandonedcart_offset1_template</template>
+            </offset1>
+            <offset2>
+                <template>abandonedcart_offset2_template</template>
+            </offset2>
+            <offset3>
+                <template>abandonedcart_offset3_template</template>
+            </offset3>
+            <admin>
+                <template>abandonedcart_admin_template</template>
+            </admin>
+            <utm_parameters>
+                <utm_source>magento</utm_source>
+                <utm_medium>email</utm_medium>
+                <utm_term></utm_term>
+                <utm_content></utm_content>
+                <utm_campaign>abandonedcart</utm_campaign>
+            </utm_parameters>
+        </abandonedcart>
     </default>
 </config>

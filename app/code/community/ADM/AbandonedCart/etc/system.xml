@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <config>
 	<sections>
-
-				<abandonedcart translate="label comment" module="adm_abandonedcart">
+        <abandonedcart translate="label comment" module="adm_abandonedcart">
             <label>Abandoned Cart</label>
             <tab>sales</tab>
             <frontend_type>text</frontend_type>
@@ -19,193 +18,193 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>   
-                        <enabled translate="label">
+                    <fields>
+                        <enabled translate="label comment">
                             <label>Enabled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>       
-                        </enabled>                                      
-            						<email_identity translate="label">
-                            <label>Email Sender</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_identity</source_model>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>         
-            						</email_identity>
-                        <email_copy_to translate="label">
-                            <label>Email Bcc</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>15</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment><![CDATA[Semicolon (;) separated values.]]></comment>       
-                        </email_copy_to>    
-                        <test_mode translate="label">
-                            <label>Test Mode</label>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <email_identity translate="label comment">
+                            <label>Email Sender</label>
                             <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>25</sort_order>
+                            <source_model>adminhtml/system_config_source_email_identity</source_model>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment><![CDATA[When test mode is enabled all mail will be send to the test mode email defined]]></comment>       
-                        </test_mode>    
-                        <test_email translate="label">
-                            <label>Test mode email</label>
+                            <show_in_store>1</show_in_store>
+                        </email_identity>
+                        <email_copy_to translate="label comment">
+                            <label>Email Bcc</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment><![CDATA[Semicolon (;) separated values.]]></comment>      
-                            <depends><test_mode>1</test_mode></depends> 
-                        </test_email>                                                      
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Semicolon (;) separated values.]]></comment>
+                        </email_copy_to>
+                        <test_mode translate="label comment">
+                            <label>Test Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[When test mode is enabled all mail will be send to the test mode email defined]]></comment>
+                        </test_mode>
+                        <test_email translate="label comment">
+                            <label>Test mode email</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Semicolon (;) separated values.]]></comment>
+                            <depends><test_mode>1</test_mode></depends>
+                        </test_email>
                         <mail_limit translate="label comment">
                             <label>Mail limit</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
+                            <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>    
-                            <validate>validate-digits</validate>  
-                            <comment>Max number email to send at once. Can be used in test mode or production.</comment>              
-                        </mail_limit>                            
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-digits</validate>
+                            <comment>Max number email to send at once. Can be used in test mode or production.</comment>
+                        </mail_limit>
                     </fields>
                 </general>
-                <offset1>
+                <offset1 translate="label">
                     <label>First reminder</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <depends><enabled>1</enabled></depends>  
-                    <fields>      
-                        <scheduled translate="label">
+                    <depends><enabled>1</enabled></depends>
+                    <fields>
+                        <scheduled translate="label comment">
                             <label>Scheduled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>   
-                        </scheduled>              
-                        <delay translate="label comment">
-                            <label>Delay period</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>    
-                            <validate>validate-digits</validate>  
-                            <comment>Delay in hours to send email after customer's last activity</comment>              
-                        </delay>
-                        <template translate="label">
-                            <label>Email template</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <show_in_store>1</show_in_store>
+                        </scheduled>
+                        <delay translate="label comment">
+                            <label>Delay period</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </template>                                    
-                    </fields>                
+                            <validate>validate-digits</validate>
+                            <comment>Delay in hours to send email after customer's last activity</comment>
+                        </delay>
+                        <template translate="label comment">
+                            <label>Email template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                    </fields>
                 </offset1>
-                <offset2>
+                <offset2 translate="label">
                     <label>Second reminder</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <depends><enabled>1</enabled></depends>  
-                    <fields>      
-                        <scheduled translate="label">
+                    <depends><enabled>1</enabled></depends>
+                    <fields>
+                        <scheduled translate="label comment">
                             <label>Scheduled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>   
-                        </scheduled>              
-                        <delay translate="label comment">
-                            <label>Delay period</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>    
-                            <validate>validate-digits</validate>  
-                            <comment>Delay in hours to send email after customer's last activity</comment>              
-                        </delay>
-                        <template translate="label">
-                            <label>Email template</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <show_in_store>1</show_in_store>
+                        </scheduled>
+                        <delay translate="label comment">
+                            <label>Delay period</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </template>                                    
-                    </fields>                
+                            <validate>validate-digits</validate>
+                            <comment>Delay in hours to send email after customer's last activity</comment>
+                        </delay>
+                        <template translate="label comment">
+                            <label>Email template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                    </fields>
                 </offset2>
-                <offset3>
+                <offset3 translate="label">
                     <label>Third reminder</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>40</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <depends><enabled>1</enabled></depends>  
-                    <fields>      
-                        <scheduled translate="label">
+                    <depends><enabled>1</enabled></depends>
+                    <fields>
+                        <scheduled translate="label comment">
                             <label>Scheduled</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>   
-                        </scheduled>              
-                        <delay translate="label comment">
-                            <label>Delay period</label>
-                            <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>    
-                            <validate>validate-digits</validate>  
-                            <comment>Delay in hours to send email after customer's last activity</comment>              
-                        </delay>
-                        <template translate="label">
-                            <label>Email template</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <show_in_store>1</show_in_store>
+                        </scheduled>
+                        <delay translate="label comment">
+                            <label>Delay period</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </template>                                    
-                    </fields>                
-                </offset3>         
-                <admin>
+                            <validate>validate-digits</validate>
+                            <comment>Delay in hours to send email after customer's last activity</comment>
+                        </delay>
+                        <template translate="label comment">
+                            <label>Email template</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_email_template</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </template>
+                    </fields>
+                </offset3>
+                <admin translate="label">
                     <label>Manual admin reminder</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>45</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <depends><enabled>1</enabled></depends>  
-                    <fields>      
-                        <template translate="label">
+                    <depends><enabled>1</enabled></depends>
+                    <fields>
+                        <template translate="label comment">
                             <label>Email template</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_email_template</source_model>
@@ -213,53 +212,52 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </template>                                    
-                    </fields>                
-                </admin>                                
-                <utm_parameters>
+                        </template>
+                    </fields>
+                </admin>
+                <utm_parameters translate="label">
                     <label>Utm Parameters</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>50</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>                    
-                        <utm_source translate="label">
+                    <fields>
+                        <utm_source translate="label comment">
                             <label>Source</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>      
-                        </utm_source>  
-                        <utm_medium translate="label">
-                            <label>Medium</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>      
-                        </utm_medium>  
-                        <utm_term translate="label">
-                            <label>Term</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>      
-                        </utm_term>  
-                        <utm_campaign translate="label">
-                            <label>Campaign</label>
+                            <show_in_store>1</show_in_store>
+                        </utm_source>
+                        <utm_medium translate="label comment">
+                            <label>Medium</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>15</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>      
-                        </utm_campaign>                                                                          
-                    </fields>                
+                            <show_in_store>1</show_in_store>
+                        </utm_medium>
+                        <utm_term translate="label comment">
+                            <label>Term</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </utm_term>
+                        <utm_campaign translate="label comment">
+                            <label>Campaign</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </utm_campaign>
+                    </fields>
                 </utm_parameters>
-					</groups>
-				</abandonedcart>
-
+            </groups>
+        </abandonedcart>
 	</sections>
 </config>
