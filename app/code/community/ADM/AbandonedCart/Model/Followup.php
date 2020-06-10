@@ -137,19 +137,20 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         }
     }
 
-
     public function sendMail($force=false)
     {
         $mailSent = false;
         $error    = false;
+        $appEmulation = Mage::getSingleton('core/app_emulation');
+        $quote = Mage::getModel('sales/quote')->setStore(Mage::app()->getStore($this->getStoreId()))
+            ->load($this->getQuoteId());
+        $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($quote->getStoreId());
 
         $templateId = $force ? Mage::getStoreConfig('abandonedcart/admin/template') : $this->_getTemplate();
         if(empty($templateId)) {
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_TEMPLATE;
         }
 
-        $quote = Mage::getModel('sales/quote')->setStore(Mage::app()->getStore($this->getStoreId()))
-            ->load($this->getQuoteId());
 
         if(!$quote->getId()) {
             $error = ADM_AbandonedCart_Model_Tracker::ERR_NO_QUOTE;
@@ -162,9 +163,13 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
 
         if(!$error) {
             try {
+                //Start environment emulation of the specified store
                 $mailSent = $this->_sendMail($templateId, $quote);
             } catch (Exception $e) {
                 Mage::logException($e);
+            }
+            finally{
+                $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
             }
         }
 
