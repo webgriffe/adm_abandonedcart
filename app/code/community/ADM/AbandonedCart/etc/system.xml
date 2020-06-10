@@ -134,6 +134,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment><![CDATA[<span style="color:#ff0000;">This reminder will be considered only if ALL reminders before this are active and completely configured.</span>]]></comment>
                         </scheduled>
                         <delay translate="label comment">
                             <label>Delay period</label>
@@ -173,6 +174,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment><![CDATA[<span style="color:#ff0000;">This reminder will be considered only if ALL reminders before this are active and completely configured.</span>]]></comment>
                         </scheduled>
                         <delay translate="label comment">
                             <label>Delay period</label>
