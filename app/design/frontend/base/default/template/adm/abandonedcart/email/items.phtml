@@ -21,7 +21,7 @@
         <?php endforeach; ?>
 
         <tbody>
-            <?php echo $this->getChildHtml('followup_totals') ?>
+            <?php echo $this->getChild('followup_totals')->setCustomQuote($_quote)->toHtml(); ?>
         </tbody>
     </table>
 <?php endif; ?>
