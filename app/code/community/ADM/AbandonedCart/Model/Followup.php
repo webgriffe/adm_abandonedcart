@@ -256,6 +256,7 @@ class ADM_AbandonedCart_Model_Followup extends Mage_Core_Model_Abstract
         /** @var $appEmulation Mage_Core_Model_App_Emulation */
         $appEmulation = Mage::getSingleton('core/app_emulation');
         $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($this->getStoreId());
+        Mage::app()->getTranslator()->init('frontend', true);
 
         $tplVars = [
             'followup'  => $this,
